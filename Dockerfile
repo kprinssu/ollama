@@ -149,14 +149,14 @@ RUN rm -rf \
     ./dist/linux-amd64/lib/ollama/libcu*.so* \
     ./dist/linux-amd64/lib/ollama/runners/cuda*
 
-FROM --platform=linux/amd64 ubuntu:22.04 AS runtime-amd64
+FROM --platform=linux/amd64 ubuntu:24.04 AS runtime-amd64
 RUN apt-get update && \
     apt-get install -y ca-certificates && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY --from=build-amd64 /go/src/github.com/ollama/ollama/dist/linux-amd64/bin/ /bin/
 COPY --from=runners-cuda-amd64 /go/src/github.com/ollama/ollama/dist/linux-amd64/lib/ /lib/
 
-FROM --platform=linux/arm64 ubuntu:22.04 AS runtime-arm64
+FROM --platform=linux/arm64 ubuntu:24.04 AS runtime-arm64
 RUN apt-get update && \
     apt-get install -y ca-certificates && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -167,7 +167,7 @@ COPY --from=runners-jetpack6-arm64 /go/src/github.com/ollama/ollama/dist/linux-a
 
 
 # ROCm libraries larger so we keep it distinct from the CPU/CUDA image
-FROM --platform=linux/amd64 ubuntu:22.04 AS runtime-rocm
+FROM --platform=linux/amd64 ubuntu:24.04 AS runtime-rocm
 # Frontload the rocm libraries which are large, and rarely change to increase chance of a common layer
 # across releases
 COPY --from=build-amd64 /go/src/github.com/ollama/ollama/dist/linux-amd64-rocm/lib/ /lib/
