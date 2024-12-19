@@ -572,6 +572,7 @@ func (gpus RocmGPUInfoList) RefreshFreeMemory() error {
 		return nil
 	}
 	for i := range gpus {
+		slog.Debug("attempting to refresh memory", "name", gpus[i].Name, "filepath", gpus[i].freeFilepath)
 		usedMemory, err := getFreeMemory(gpus[i].usedFilepath)
 		if err != nil {
 			return err
