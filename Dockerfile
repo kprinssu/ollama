@@ -19,10 +19,10 @@ ARG GOLANG_VERSION
 ARG CUDA_VERSION_11
 ARG CUDA_VERSION_12
 COPY ./scripts/rh_linux_deps.sh /
-RUN apt update && apt install -y zsh
 ENV PATH /opt/rh/devtoolset-10/root/usr/bin:/usr/local/cuda/bin:$PATH
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
-RUN GOLANG_VERSION=${GOLANG_VERSION} zsh /rh_linux_deps.sh
+RUN GOLANG_VERSION=${GOLANG_VERSION} bash /rh_linux_deps.sh
+RUN apt update && apt install -y zsh
 # TODO intel oneapi goes here...
 ENV GOARCH amd64
 ENV CGO_ENABLED 1
