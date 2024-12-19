@@ -49,7 +49,7 @@ EOF
         yum-utils \
         pigz
 elif grep -i "ubuntu" /etc/lsb-release >/dev/null; then
-    apt install -y build-essential
+    apt install -y build-essential pigz
 else
     echo "ERROR Unexpected distro"
     exit 1
