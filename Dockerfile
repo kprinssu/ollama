@@ -1,7 +1,7 @@
 ARG GOLANG_VERSION=1.22.8
 ARG CUDA_VERSION_11=11.3.1
 ARG CUDA_VERSION_12=12.4.0
-ARG ROCM_VERSION=6.1.2
+ARG ROCM_VERSION=6.3
 ARG JETPACK_6=r36.2.0
 ARG JETPACK_5=r35.4.1
 
@@ -14,20 +14,15 @@ ARG JETPACK_5=r35.4.1
 #
 # make -j 10 dist
 #
-FROM --platform=linux/amd64 rocm/dev-centos-7:${ROCM_VERSION}-complete AS unified-builder-amd64
+FROM --platform=linux/amd64 rocm/dev-ubuntu-24.04:${ROCM_VERSION}-complete AS unified-builder-amd64
 ARG GOLANG_VERSION
 ARG CUDA_VERSION_11
 ARG CUDA_VERSION_12
 COPY ./scripts/rh_linux_deps.sh /
+RUN apt update && apt install -y zsh
 ENV PATH /opt/rh/devtoolset-10/root/usr/bin:/usr/local/cuda/bin:$PATH
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
-RUN GOLANG_VERSION=${GOLANG_VERSION} sh /rh_linux_deps.sh
-RUN yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo && \
-    dnf clean all && \
-    dnf install -y \
-    zsh \
-    cuda-toolkit-$(echo ${CUDA_VERSION_11} | cut -f1-2 -d. | sed -e "s/\./-/g") \
-    cuda-toolkit-$(echo ${CUDA_VERSION_12} | cut -f1-2 -d. | sed -e "s/\./-/g")
+RUN GOLANG_VERSION=${GOLANG_VERSION} zsh /rh_linux_deps.sh
 # TODO intel oneapi goes here...
 ENV GOARCH amd64
 ENV CGO_ENABLED 1

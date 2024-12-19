@@ -48,6 +48,8 @@ EOF
         findutils \
         yum-utils \
         pigz
+elif grep -i "ubuntu" /etc/lsb-release >/dev/null; then
+    apt install -y build-essential
 else
     echo "ERROR Unexpected distro"
     exit 1
