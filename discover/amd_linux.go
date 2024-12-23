@@ -593,7 +593,6 @@ func getFreeMemory(usedFile string) (uint64, error) {
 	if err != nil {
 		return 0, fmt.Errorf("failed to read sysfs node %s %w", usedFile, err)
 	}
-	slog.Debug(
 	usedMemory, err := strconv.ParseUint(strings.TrimSpace(string(buf)), 10, 64)
 	if err != nil {
 		slog.Debug("failed to parse sysfs node", "file", usedFile, "error", err)
