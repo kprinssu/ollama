@@ -114,6 +114,8 @@ func GTTmemoryOnAPU(gfx string) (bool, error) {
 
 	if kernelVersionValid && gfxValid {
 		slog.Debug("AMD APU valid to use GTT memory")
+	} else {
+		slog.Debug("AMD APU not valid to use GTT memory, going to use VRAM")
 	}
 
 	return kernelVersionValid && gfxValid, nil
