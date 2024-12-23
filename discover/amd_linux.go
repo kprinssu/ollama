@@ -313,7 +313,6 @@ func AMDGetGPUInfo() ([]RocmGPUInfo, error) {
 			ApuUseGTT, err = GTTmemoryOnAPU(fmt.Sprintf("gfx%d%x%x", major, minor, patch))
 			if err != nil {
 				slog.Debug("Error:", err)
-				slog.Debug(
 				continue
 			}
 			// Found the matching DRM directory
