@@ -347,6 +347,8 @@ func AMDGetGPUInfo() ([]RocmGPUInfo, error) {
 			break
 		}
 
+		slog.Debug("amdgpu used file path", "file", usedFile)
+
 		var name string
 		// TODO - PCI ID lookup
 		if vendor > 0 && device > 0 {
@@ -580,6 +582,7 @@ func (gpus RocmGPUInfoList) RefreshFreeMemory() error {
 		slog.Debug("updating rocm free memory", "gpu", gpus[i].ID, "name", gpus[i].Name, "before", format.HumanBytes2(gpus[i].FreeMemory), "now", format.HumanBytes2(gpus[i].TotalMemory-usedMemory))
 		gpus[i].FreeMemory = gpus[i].TotalMemory - usedMemory
 	}
+
 	return nil
 }
 
@@ -588,6 +591,7 @@ func getFreeMemory(usedFile string) (uint64, error) {
 	if err != nil {
 		return 0, fmt.Errorf("failed to read sysfs node %s %w", usedFile, err)
 	}
+	slog.Debug(
 	usedMemory, err := strconv.ParseUint(strings.TrimSpace(string(buf)), 10, 64)
 	if err != nil {
 		slog.Debug("failed to parse sysfs node", "file", usedFile, "error", err)
