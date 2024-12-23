@@ -286,7 +286,8 @@ func AMDGetGPUInfo() ([]RocmGPUInfo, error) {
 		for _, devDir := range drmMatches {
 			matched := true
 			for _, m := range mapping {
-				if m.id == 0 {
+				if m.id == 0 {]
+					slog.Debug("skipping amdgpu with id=0")
 					// Null ID means it didn't populate, so we can't use it to match
 					continue
 				}
@@ -305,11 +306,13 @@ func AMDGetGPUInfo() ([]RocmGPUInfo, error) {
 					break
 				}
 				if cmp != m.id {
+					slog.Debug("id mismatch", "expected", m.id, "got", cmp)
 					matched = false
 					break
 				}
 			}
 			if !matched {
+				slog.Debug("not a match", "amdgpu", match, "drm", devDir)
 				continue
 			}
 			ApuUseGTT, err = GTTmemoryOnAPU(fmt.Sprintf("gfx%d%x%x", major, minor, patch))
